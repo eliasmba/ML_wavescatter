@@ -8,12 +8,16 @@ C = capacitance(cx, cy, cz ,R,rho0,rho_b,kappa0,kappa_b,delta);
 [V, resonances] = eig(C);
 resonances = sqrt(resonances);
 
-psi = stuffidk;
+S0 = MakeSmat_newbasis(R, centers, 0, N_multi);
+psi = zeros(Nres, Nres*(N_multi+1));
+for j = 1:Nres
+    chi_j = make_char_fct_newbasis(centers(j), R);
+    psi(j,:) = S0\chi_j;
+end
 %% Cor 2.9
-A = MakeA(R,omega,rho0,rho_b,kappa0,kappa_b,delta,N_multi,cx,cy);
-SkD = A(1:Nres*(N_multi+1), 1:Nres*(N_multi+1)); %Single layer potential for circular resonators in fourier basis
+Sk = MakeSmat(R, centers, k, N_multi); %Single layer potential for spherical resonators in spherical harmonics
 
-SkDx = psi*SkD'; %= SkD(psi1), ...,SkD(psiN) in the rows
+SkDx = psi*Sk'; %= SkD(psi1), ...,SkD(psiN) in the rows
 eigenmodes = V*SkDx';% = SkDx*v1, ..., SkDx*vn in the rows
                                    %elt of lR^(Nres x Nres(N_multi+1))
                                    %low frequency resonance modes outside of resonators
