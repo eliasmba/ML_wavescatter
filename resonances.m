@@ -17,8 +17,8 @@ end
 %% Cor 2.9
 Sk = MakeSmat(R, centers, k, N_multi); %Single layer potential for spherical resonators in spherical harmonics
 
-SkDx = psi*Sk'; %= SkD(psi1), ...,SkD(psiN) in the rows
-eigenmodes = V*SkDx';% = SkDx*v1, ..., SkDx*vn in the rows
+Sk_psi = psi*Sk'; %= SkD(psi1), ...,SkD(psiN) in the rows
+eigenmodes = V*Sk_psi';% = Sk_psi*v1, ..., Sk_psi*vn in the rows
                                    %elt of lR^(Nres x Nres(N_multi+1))
                                    %low frequency resonance modes outside of resonators
 end
