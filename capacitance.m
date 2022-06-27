@@ -1,5 +1,5 @@
 function C = capacitance(cx, cy, cz ,R,rho0,rho_b,kappa0,kappa_b,delta)
-
+%TODO: fit for cx, cy, cz & R a constant scalar
 N = length(cx);
 
 N_multi = 0;
