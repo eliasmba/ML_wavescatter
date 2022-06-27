@@ -26,7 +26,7 @@ u_in_pro =  SkD*(SkD\u_in); %solution for lfr system in fourier basis
                                          %todo: u_in
 z = zeros(n_r);                                  
 for i = 1:n_r
-    z(i) = expansion_eval_newbasis(u_in_pro, Nres, N_multi, centers, receivers(i), k);
+    z(i) = expansion_eval_newbasis(u_in_pro, Nres, N_multi, centers, receivers(i), k); %u_in
     for k = 1:Nres
         z(i) = z(i) + a(k)*expansion_eval(eigenmodes(k,:), Nres, N_multi, centers, receivers(i), k);
     end
