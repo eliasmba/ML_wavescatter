@@ -11,7 +11,7 @@ resonances = sqrt(resonances);
 S0 = MakeSmat_newbasis(R, centers, 0, N_multi);
 psi = zeros(Nres, Nres*(N_multi+1));
 for j = 1:Nres
-    chi_j = make_char_fct_newbasis(centers(j), R);
+    chi_j = make_char_fct_newbasis(centers(j), R, N_multi);
     psi(j,:) = S0\chi_j;
 end
 %% Cor 2.9
