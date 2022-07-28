@@ -11,10 +11,10 @@ lhs = V*Omega;
 vols = 4/3*pi*R.^3;
 
 %originating wave pattern
-f = @(x) (exp(x))
+f = @(x) (exp(x));
 
-u_in1 = @(x) (sum(f(x - sources).*intensities))
-u_in = make_f_newbasis(u_in1, N_multi);
+u_in1 = @(x) (sum(f(x - sources).*intensities));
+u_in = make_f_newbasis(u_in1, Nres, centers, r, N_multi, k);
 Su = makeSmat_newbasis(R, centers, 0, N_multi)\u_in;
 S = zeros(Nres, 1);
 for  j = 1:Nres
