@@ -12,7 +12,7 @@ S0 = MakeSmat_newbasis(R, centers, 0, N_multi);
 psi = zeros(Nres, Nres*(N_multi+1));
 for j = 1:Nres
     char_j = @(x) (char_f_sphere(x, centers(j), R));
-    chi_j = make_f_newbasis(char_j, N_multi);
+    chi_j = make_f_newbasis(char_j, Nres, centers, r, N_multi, k);
     psi(j,:) = S0\chi_j;
 end
 %% Cor 2.9
@@ -22,4 +22,13 @@ Sk_psi = psi*Sk'; %= SkD(psi1), ...,SkD(psiN) in the rows
 eigenmodes = V*Sk_psi';% = Sk_psi*v1, ..., Sk_psi*vn in the rows
                                    %elt of lR^(Nres x Nres(N_multi+1))
                                    %low frequency resonance modes outside of resonators
+end
+
+
+function [ind] = char_f_shere(x, c, r)
+    if abs(norm(x - c) - r) < 0.0001
+        ind = 1;
+    else
+        ind = 0;
+   end
 end
