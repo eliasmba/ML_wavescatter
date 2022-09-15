@@ -5,7 +5,7 @@ N = length(cx);
 N_multi = 0;
 
 omega = 0.000001;
-A = MakeA(R,omega,rho0,rho_b,kappa0,kappa_b,delta,N_multi,cx,cy);
+A = MakeA(R,omega,rho0,rho_b,kappa0,kappa_b,delta,N_multi,cx,cy, cz);
 
 B = zeros(N);
 for i = 1:N
