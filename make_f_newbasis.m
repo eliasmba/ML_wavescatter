@@ -1,7 +1,7 @@
 function [u_coeff] = make_f_newbasis(f, Nres,  centers, N_multi, k)
   assert(isa(f,'function_handle'));
   
-  acc = 20; %nr of random points to estimate difference
+  acc = 200; %nr of random points to estimate difference
   thresh = 10; %optimisation steps until warning
   expansion_fit_error = 0.1; %desired 
   rand_err = 1;
@@ -30,7 +30,7 @@ function [u_coeff] = make_f_newbasis(f, Nres,  centers, N_multi, k)
     
     steps = steps + 1;
     if steps == thresh
-      printf('expansion fit is taking more than' + str(thresh) + 'steps');
+      printf('expansion fit is taking more than' + string(thresh) + 'steps');
     end
   end
 end
@@ -38,6 +38,6 @@ end
 function [s] = sum_square_diff(u, fu, f, acc, p_test)
   s = 0;
   for i = 1:acc
-    s = s + (fu(u, p_test(:,i))  - f(p_test(:,i))).^2;
+    s = s + abs(fu(u, p_test(:,i))  - f(p_test(:,i)));
   end
 end

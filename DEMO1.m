@@ -54,7 +54,7 @@ v_b = sqrt(kappa_b/rho_b);  % speed of sound in air
 % High contrast parameters \delta
 delta=rho_b/rho0;
 omega=3;
-y = (rand(3,5)-0.5)*2; %initial guess
+y = (rand(3,3)-0.5)*2; %initial guess
 [M, Sigmax, Sigmaz] = get_functions(z, x, y, U, R*ones(size(y,2),1), 0, kappa0, rho0, kappa_b, rho_b);
 
 
