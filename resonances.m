@@ -11,28 +11,14 @@ k = omega*sqrt(rho_b/kappa_b);
 [V, resonances] = eig(C);
 resonances = sqrt(resonances);
 centers = [cx;cy;cz];
-S0 = MakeSmat_newbasis(R(1), centers, 0, N_multi);
-psi = zeros(Nres, Nres*(N_multi+1));
-for j = 1:Nres
-    char_j = @(x) (char_f_sphere(x, centers(:,j), R(1)));
-    chi_j = make_f_newbasis(char_j, Nres, centers, N_multi, k);
-    disp(size(chi_j));
-    chi_j = chi_j.';
-    psi(j,:) = S0\chi_j;
-end
-%% Cor 2.9
-Sk = MakeSmat_newbasis(R(1), centers, k, N_multi); %Single layer potential for spherical resonators in spherical harmonics
+S0 = MakeSmat_newbasis(R(1), centers, 0.00001, 0); %here we set N_multi = 0, as the characteristic function is constant on the resonators(we therefore only need m=l=0)
 
-Sk_psi = psi*Sk'; %= SkD(psi1), ...,SkD(psiN) in the rows
+psi = sqrt(4)*S0^-1; %we have psi1,..., psiN in the columns
+%% Cor 2.9
+Sk = MakeSmat_newbasis(R(1), centers, k, 0); %Single layer potential for spherical resonators in spherical harmonics
+
+Sk_psi = (Sk*psi).'; %= SkD(psi1), ...,SkD(psiN) in the rows
 eigenmodes = V*Sk_psi';% = Sk_psi*v1, ..., Sk_psi*vn in the rows
                                    %elt of lR^(Nres x Nres(N_multi+1))
                                    %low frequency resonance modes outside of resonators
-end
-
-function [ind] = char_f_sphere(x, c, r)
-    if abs(norm(x - c) - r) < 0.0001
-        ind = 1;
-    else
-        ind = 0;
-   end
 end

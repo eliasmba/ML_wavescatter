@@ -12,7 +12,7 @@ end
 
 Sk0=zeros(N_multi+1);
 
-const=-1i*pi/2*sqrt(R^3/r_x);
+const=-1i*k*R;
 
 for l=1:N_multi+1
     for lp=1:N_multi+1

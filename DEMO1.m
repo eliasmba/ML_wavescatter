@@ -60,11 +60,11 @@ y = (rand(3,3)-0.5)*2; %initial guess
 
 %% Test Outcome 
 k0=omega*sqrt(rho0/kappa0);
-kb=omega*sqrt(rhob/kappab);
+kb=omega*sqrt(rho_b/kappa_b);
 N=10;
 disp(['k0 : ', num2str(k0), 'kb : ', num2str(kb)]);
 %y=rand(2,N);
-[y, nor] = gradientDescent(U, Y, z, x, rhob, rho0, omega, N);
+[y, nor] = gradientDescent(U, Y, z, x, rho_b, rho0, omega, N);
 
 
 Nk = Sigmax(y).'*(M\Sigmaz(y));
