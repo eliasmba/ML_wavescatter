@@ -13,46 +13,55 @@ N_multi=0;
 
 
 %% Modal Decomposition
-om = omega*ones(Nres);
-Omega = diag(om - res);
+om = omega*ones(Nres,1);
+Omega = om - res;
+
 lhs = V*Omega;
+
+
 
 vols = 4/3*pi*R.^3;
 
 %u_in = build_u_in_newbasis2(sources, intensities, N_multi, centers,intensities);
-u_in = inc(centers, sources,k);
-disp(size(u_in));
-S = MakeSmat_newbasis(R(1), centers, 0.0001, N_multi)\u_in;
+u_in = inc(centers, sources,3).';
+disp('u');
+disp(u_in);
+
+S = MakeSmat_newbasis(R(1), centers, 0.0001, N_multi)\u_in*sqrt(4);
 %Single layer potential inverse integrals
+disp(S);
 
 rhs = kappa_b/rho0*S./vols;
 
+
 a = linsolve(lhs, rhs); %decomposition coefficients
 
-disp(size(a));
+disp(a);
+
 
 SkD = MakeSmat_newbasis(R(1), centers, k, N_multi);
 u_in_pro =  SkD*(SkD\u_in); %solution for lfr system in fourier basis
 
 %syms y [3 Nres] x [3 n_s] z [3 n_r]
 x = sources;
-y = receivers;
-z = centers;
+y = centers;
+z = receivers;
 
 absDy =  (y(1,:).'- y(1,:)).^2+ (y(2,:).'-y(2,:)).^2 + (y(3,:).'-y(3,:)).^2;
 absDx =  (y(1,:).'- x(1,:)).^2+ (y(2,:).'-x(2,:)).^2 + (y(3,:).'-x(3,:)).^2;
 absDz =  (y(1,:).'- z(1,:)).^2+ (y(2,:).'-z(2,:)).^2 + (y(3,:).'-z(3,:)).^2;
 
+%disp('absDy:');
+
 M = zeros(Nres);
 Sigmax = zeros(Nres, n_r);
 Sigmaz = zeros(Nres, n_s);
-disp(Nres);
+
 for i=1:Nres
     M(i,i) = 1;
     for j=1:Nres
-        disp(j);
         if i~=j
-            M(i,j) = a(i)*eigenmodes(i,:)*(y(i,:)-y(j,:)).'; %this is u_n
+            M(i,j) = a(i)*sum(eigenmodes(i,:))*absDy(i,j); %this is u_n
         end
     end
 
@@ -65,13 +74,22 @@ for i=1:Nres
     end
 end
 
+%disp(Sigmax);
+
+M(isinf(M) | isnan(M)) = 0;
+
+Sigmax(isinf(Sigmax) | isnan(Sigmax)) = 0;
+
+Sigmaz(isinf(Sigmaz) | isnan(Sigmaz)) = 0;
 end
+
+
 
 %function [u] = inc(x, sources,k)
  %   norm_y = @(y) sqrt(y(1,:).^2+y(2,:).^2 + y(3,:).^2);
   %  u = sum(exp(k*norm_y(repmat(x(1),1,size(sources, 2)) - sources(1,:).')),2);
 %end
 function[u] = inc(x, sources, k)
-norm_y = @(y, sources) sqrt((y(1,:).'-sources(1,:)).^2+(y(2,:).'-sources(2,:)).^2 + (y(3,:).'-sources(3,:)).^2);
+norm_y = @(y, sources) sqrt((y(1,:)).^2+(y(2,:)).^2 + (y(3,:)).^2);
 u = exp(k*norm_y(x,sources));
 end

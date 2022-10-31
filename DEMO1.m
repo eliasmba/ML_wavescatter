@@ -41,33 +41,35 @@ z = [-1.1*ones(1,size(U,2)); linspace(-1.0,1.0,size(U,2)); 0.5*ones(1, size(U, 2
 x = [+1.1*ones(1,size(Y,2)); linspace(-0.7,0.7,size(Y,2));0.5*ones(1, size(Y,2))];
 
 %%% Material parameters
-high = 5000;
+high = 1e3;
 
 rho0 = high;             % density of background
-kappa0 = high;           % bulk modulus of background
+kappa0 = 2e9;           % bulk modulus of background
 v = sqrt(kappa0/rho0);  % speed of sound in background
 
-rho_b = 1;            % density of resonators  
-kappa_b = 1;          % bulk modulus of resonators
+rho_b = 1.2;            % density of resonators  
+kappa_b = 1e5;          % bulk modulus of resonators
 v_b = sqrt(kappa_b/rho_b);  % speed of sound in air
 
 % High contrast parameters \delta
 delta=rho_b/rho0;
-omega=3;
-y = (rand(3,3)-0.5)*2; %initial guess
-[M, Sigmax, Sigmaz] = get_functions(z, x, y, U, R*ones(size(y,2),1), 0, kappa0, rho0, kappa_b, rho_b);
+omega=0.0001;
+%y = (rand(3,N)-0.5)*2; %initial guess
+% [M, Sigmax, Sigmaz] = get_functions(z, x, y, U, R*ones(size(y,2),1), 0, kappa0, rho0, kappa_b, rho_b);
 
 
 %% Test Outcome 
 k0=omega*sqrt(rho0/kappa0);
 kb=omega*sqrt(rho_b/kappa_b);
-N=10;
+N=70;
 disp(['k0 : ', num2str(k0), 'kb : ', num2str(kb)]);
 %y=rand(2,N);
-[y, nor] = gradientDescent(U, Y, z, x, rho_b, rho0, omega, N);
+[y, nor] = gradientDescent(U, Y, z, x, R, kappa0, kappa_b, rho_b, rho0, omega, N);
+disp('y:');
+%disp(y);
 
-
-Nk = Sigmax(y).'*(M\Sigmaz(y));
+[M, Sigmax, Sigmaz] = get_functions(z, x, y, U, R*ones(size(y,2),1), 0, kappa0, rho0, kappa_b, rho_b);
+Nk = Sigmax.'*(M\Sigmaz);
 norUY = sum(abs(U*Nk.'-Y), 'all'); 
 disp(['nor = ', num2str(norUY)]);
 plot(y(1,:),y(2,:),'.g','MarkerSize',5); hold on;

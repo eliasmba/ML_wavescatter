@@ -5,10 +5,16 @@ function [resonances, eigenmodes, V] = resonances(cx, cy, cz, R, N_multi, kappa0
 delta = rho0/rho_b;
 Nres = length(R);
 C = capacitance(cx, cy, cz ,R,rho0,rho_b,kappa0,kappa_b,delta);
-omega = 0.01;
+omega = 0.1;
 k = omega*sqrt(rho_b/kappa_b);
 
 [V, resonances] = eig(C);
+disp('C');
+disp(C);
+disp('resonances');
+disp(resonances);
+disp('V');
+disp(V);
 resonances = sqrt(resonances);
 centers = [cx;cy;cz];
 S0 = MakeSmat_newbasis(R(1), centers, 0.00001, 0); %here we set N_multi = 0, as the characteristic function is constant on the resonators(we therefore only need m=l=0)
